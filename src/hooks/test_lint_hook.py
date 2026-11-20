@@ -16,7 +16,10 @@ def write_slop(directory, name="notes.md"):
     return str(path)
 
 def post(path, **event):
-    return {"hook_event_name": "PostToolUse", "tool_name": "Write", "tool_input": {"file_path": path}, **event}
+    """A Write event whose content is what the file holds now."""
+    full = pathlib.Path(event.get("cwd") or ".", path)
+    content = full.read_text(encoding="utf-8") if full.is_file() else ""
+    return {"hook_event_name": "PostToolUse", "tool_name": "Write", "tool_input": {"file_path": path, "content": content}, **event}
 
 def test_post_tool_use_flags_a_slop_markdown_file():
     with tempfile.TemporaryDirectory() as d:
@@ -29,13 +32,13 @@ def test_post_tool_use_prints_the_offending_text_and_line_number():
         path.write_text("# Title\n\nYou should check this. It has been done.\n", encoding="utf-8")
         code, out, err = run(post(str(path)))
     assert code == 2, (code, err)
-    assert "line 3, banned_modal: should" in err, err
-    assert "line 3, perfect_tense: has been" in err, err
+    assert "line 3 of that text, banned_modal: should" in err, err
+    assert "line 3 of that text, perfect_tense: has been" in err, err
 
 def test_post_tool_use_ignores_clean_file_and_non_markdown():
     with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as f:
         f.write("Run the migration. Then restart the service.\n"); path = f.name
-    assert run({"hook_event_name": "PostToolUse", "tool_input": {"file_path": path}})[0] == 0
+    assert run(post(path))[0] == 0
     assert run({"hook_event_name": "PostToolUse", "tool_input": {"file_path": "/tmp/x.py"}})[0] == 0
 
 def test_post_tool_use_skips_the_claude_config_dir():
@@ -85,6 +88,24 @@ def test_post_tool_use_matches_a_glob_through_a_symlinked_directory():
         path = str(pathlib.Path(d, "notes", "notes.md"))
         assert run(post(path))[0] == 2
         assert run(post(path), env={"SIMPLE_ENGLISH_LINT_EXCLUDE": f"{d}/notes/*"})[0] == 0
+
+def test_post_tool_use_lints_only_the_new_text_of_an_edit():
+    with tempfile.TemporaryDirectory() as d:
+        path = write_slop(d)
+        clean = {"hook_event_name": "PostToolUse", "tool_name": "Edit",
+                 "tool_input": {"file_path": path, "old_string": "x", "new_string": "Run the migration."}}
+        assert run(clean)[0] == 0, "slop elsewhere in the file is not the edit's"
+        dirty = {**clean, "tool_input": {**clean["tool_input"], "new_string": "You should simply leverage it."}}
+        code, out, err = run(dirty)
+        assert code == 2 and "line 1 of that text, banned_modal: should" in err, err
+
+def test_stop_allows_a_bold_headline_only():
+    good = "**The run passed: 13 of 13 lines kept.**\n\nThe books admit 13 lines."
+    code, out, err = run({"hook_event_name": "Stop", "last_assistant_message": good})
+    assert code == 0 and out.strip() == "", (code, out)
+    bad = good + " The **new** lines come from the next run."
+    code, out, err = run({"hook_event_name": "SubagentStop", "last_assistant_message": bad})
+    assert "bold span(s) after the headline" in json.loads(out)["systemMessage"], out
 
 def test_stop_flags_slop_reply_and_never_blocks():
     long = "Great question! " + "This is a robust sentence. " * 7 + "I hope this helps!"
