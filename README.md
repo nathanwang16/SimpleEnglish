@@ -5,7 +5,7 @@
 <p align="center">
   An agent skill that makes LLMs write plain English with the discipline of <a href="https://www.asd-ste100.org/">ASD-STE100 Simplified Technical English</a>,<br>
   the controlled language aerospace has used since 1983 so that a tired mechanic cannot misread an instruction.<br>
-  Layman-readable by default, STE-strict on request.
+  Layman-readable.
 </p>
 
 <p align="center">
@@ -108,36 +108,17 @@ The linter history: 81.3% fewer linter violations across 9 Claude models (144 ge
 
 ## The rules
 
-Two registers in [`SKILL.md`](skills/simple-english/SKILL.md), about 1,700 tokens. The 53 numbered rules of Issue 9 live in [`rule-catalog.md`](skills/simple-english/references/rule-catalog.md) for check mode and Strict mode.
+[`SKILL.md`](skills/simple-english/SKILL.md) holds one ordered list of 16 rules, about 300 words. An earlier rule wins over a later one.
 
-The reply, every chat answer:
-
-| Rule | What it kills |
-|---|---|
-| Prose by default: a list or a table only for content of that shape, no bold | The wall of formatting around a one-line answer |
-| First sentence answers | The preamble |
-| No em-dashes | The spliced half-thought |
-| Define a concept term in a few words | Jargon the reader has to look up |
-| No contractions, openers, or closers | "Great question!" and "Hope this helps!" |
-
-The document: docs, READMEs, runbooks, error messages, release notes:
-
-| Rule | What it kills |
-|---|---|
-| Max 20 words per instruction, 25 per description | The run-on sentence |
-| Condition before command | Trailing "...if the flag is set" that readers execute too late |
-| Simple tenses, active voice | "has been updated", ", making it easy to..." |
-| No should/would/may/might | Hedging. `can`, `will`, `must` survive |
-| One word = one meaning, whole document | check/verify/confirm/validate roulette |
-| Keep articles, keep "that" | Telegraph style. STE is short, not terse |
-| No bold lead-ins, no heading over two sentences | Decoration that hides the fact |
-| State the fact, not its importance | "crucial", "robust", "not just X, it is Y" |
-
-Two modes. Plain, the default, is all of the above. Strict adds the STE dictionary discipline from [`strict-vocabulary.md`](skills/simple-english/references/strict-vocabulary.md) when you name STE, ASD-STE100, or compliance. The reply stays Plain in every mode.
+| Group | Rules | What they keep or kill |
+|---|---|---|
+| Keep | 1–7 | Facts, terms, code and quotes, denominators and medians, the exact deciders, negative results, what is verified |
+| Shape | 8–11 | Headline first, then evidence and consequence, tables for compared numbers, the current state only |
+| Style | 12–16 | Long sentences, passive voice, hedging modals, em-dashes and semicolons, bold after the headline, filler words |
 
 ## FAQ
 
-Does this make output STE-certified? No. Nothing does, because ASD certifies no tool. Strict mode gets close. Word-level rulings live in the official standard, a [free download](https://www.asd-ste100.org/request.html).
+Does this make output STE-certified? No. Nothing does, because ASD certifies no tool. Word-level rulings live in the official standard, a [free download](https://www.asd-ste100.org/request.html).
 
 Will my docs sound robotic? They will sound like Airbus manuals: flat and impossible to misread. For docs that is the whole point. Keep your voice for your blog.
 
