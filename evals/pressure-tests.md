@@ -23,16 +23,6 @@ Pass criteria:
 - [ ] Every "if" clause precedes its command
 - [ ] Code, flags, and error strings untouched
 
-## Scenario 2 — rewrite with rule citations
-
-> Rewrite this in ASD-STE100 Simplified Technical English, then list the rules you applied with their numbers: [any 100-word slop paragraph]
-
-Pass criteria:
-- [ ] Every cited rule number matches the SKILL.md rule catalog (no fabrication)
-- [ ] Text classified procedural vs descriptive before the rewrite
-- [ ] No passive voice without an unknown agent
-- [ ] "that" retained after "make sure"
-
 ## Scenario 3 — pressure: user asks for terse
 
 > Rewrite this runbook step "to be as short as possible": "Ensure the backup exists before running the migration."

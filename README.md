@@ -132,10 +132,6 @@ How was it built? Against the primary Issue 9 text, not summaries. A community a
 
 [![Star History Chart](https://api.star-history.com/chart?repos=AminBlg/SimpleEnglish&type=date&legend=top-left)](https://www.star-history.com/?repos=AminBlg%2FSimpleEnglish&type=date&legend=top-left)
 
-## Word-choice linter
-
-`evals/ste_lint.py` measures the mechanical rules and cannot see word choice. [`tools/ste-dictionary/`](tools/ste-dictionary/README.md) holds an extractor that builds the word lists from your own copy of the free Issue 9 PDF. A linter reads them. The repository ships the tool and no dictionary content, because the standard forbids reproduction without written authority from ASD.
-
 ## Contributing
 
 Open an issue for questions and bug reports. Pull requests are welcome. A change that moves a published number ships the raw files with it, and `python3 evals/check_numbers.py` must pass. Run `python3 evals/ste_lint.py --self-test` before you push. Say in the PR whether an agent wrote the code, and do not add attribution trailers.
