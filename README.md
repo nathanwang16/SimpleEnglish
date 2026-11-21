@@ -25,34 +25,13 @@ Works in every agent that reads the [Agent Skills standard](https://agentskills.
 
 ## Install
 
-Any agent, with the [skills CLI](https://github.com/vercel-labs/skills):
+This fork installs into a repository, not into a user account, so the skill loads on every machine that clones the repository. Copy it into the directory that the repository's `.claude/skills` resolves to, and commit the result:
 
 ```bash
-npx skills add AminBlg/SimpleEnglish
+python3 vendor.py /path/to/repo/.claude/skills
 ```
 
-This installs the skill only. It does not install the session hook or the output style below, so setting `outputStyle` to `simple-english:simple-english` without the plugin does nothing. Use the Claude Code plugin for those.
-
-Claude Code plugin, with the session hook and the output style:
-
-```bash
-claude plugin marketplace add AminBlg/SimpleEnglish && claude plugin install simple-english@simple-english
-```
-
-The output style is named `simple-english:simple-english`. The short name does not resolve. Select it with `/config` under Output style, or put `{"outputStyle": "simple-english:simple-english"}` in `~/.claude/settings.json`.
-
-Codex plugin, with the session hook:
-
-```bash
-codex plugin marketplace add AminBlg/SimpleEnglish
-codex plugin add simple-english@simple-english
-```
-
-Codex asks you to trust the hook before its first run. The hooks need Node.js. Details in [`src/hooks/README.md`](src/hooks/README.md).
-
-No skill support? Paste the rule block of [`prompts/system-prompt.md`](prompts/system-prompt.md) into your system prompt, `AGENTS.md`, or `.cursorrules`. The page ends with a 60-token version for tight budgets.
-
-Then ask for any technical writing, or say "rewrite this with simple-english".
+The copy holds `SKILL.md` and `hooks/` (`lint_hook.py`, `ste_lint.py`, `slop.tsv`). Its hooks call `$CLAUDE_PROJECT_DIR/.claude/skills/simple-english/hooks/lint_hook.py`, and they run only in a session that loads the skill itself. A sub-agent gets the rules from `skills: [simple-english]` in its agent definition, but no hook. To update a repository, run `vendor.py` again and commit.
 
 ## See it
 

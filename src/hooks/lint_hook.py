@@ -25,6 +25,7 @@ import sys
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 sys.path.insert(0, str(ROOT / "evals"))
+sys.path.insert(0, str(HERE))  # a vendored copy keeps ste_lint.py beside this file
 
 MAX_HOOK_HITS = 12
 CLAUDE_DIR = ".claude"

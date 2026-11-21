@@ -11,19 +11,19 @@ description: |
 license: MIT
 compatibility: claude-code
 metadata:
-  version: "2.1.2-unicorn.2"
+  version: "2.1.2-unicorn.3"
   standard: ASD-STE100 Issue 9 (2025-01-15)
 hooks:
   PostToolUse:
     - matcher: "Write|Edit"
       hooks:
         - type: command
-          command: 'SIMPLE_ENGLISH_LINT_EXCLUDE="*/prompts/roster/*:*/prompts/discovery/*:*/prompts/codex/*:*/docs/vocabulary.md:*/unicorn-trade/trade/*:*/unicorn-trade/roster/*" python3 "$HOME/.local/share/simple-english/src/hooks/lint_hook.py"'
+          command: 'SIMPLE_ENGLISH_LINT_EXCLUDE="*/prompts/roster/*:*/prompts/discovery/*:*/prompts/codex/*:*/docs/vocabulary.md:*/unicorn-trade/trade/*:*/unicorn-trade/roster/*" python3 "$CLAUDE_PROJECT_DIR/.claude/skills/simple-english/hooks/lint_hook.py"'
           timeout: 10
   Stop:
     - hooks:
         - type: command
-          command: 'python3 "$HOME/.local/share/simple-english/src/hooks/lint_hook.py"'
+          command: 'python3 "$CLAUDE_PROJECT_DIR/.claude/skills/simple-english/hooks/lint_hook.py"'
           timeout: 10
 ---
 
